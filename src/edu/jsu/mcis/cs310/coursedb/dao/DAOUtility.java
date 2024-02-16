@@ -8,7 +8,7 @@ public class DAOUtility {
     
     public static final int TERMID_FA24 = 1;
     
-    public static String getResultSetAsJson(ResultSet rs) {
+    public static String getResultSetAsJson(ResultSet rs){
         
         JsonArray records = new JsonArray();
         
@@ -16,10 +16,31 @@ public class DAOUtility {
         
             if (rs != null) {
 
-                // INSERT YOUR CODE HERE
+               // get metadata
+                ResultSetMetaData rsmd = rs.getMetaData();
 
-            }
+                // iterating through result set
+                while (rs.next()) {
+                    
+                    // initializing jsonObject
+                    JsonObject row = new JsonObject();
+                    
+                    // iterating through each column
+                    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                        
+                        // getting name and value
+                        String name = rsmd.getColumnName(i);
+                        Object value = rs.getObject(i).toString();
+                        
+                        // put into jsonObject
+                        row.put(name, value);
+                    }
+                    
+                    // Add object to the jsonArray
+                    records.add(row);
+                }
             
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

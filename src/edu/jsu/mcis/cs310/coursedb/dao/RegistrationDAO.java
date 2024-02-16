@@ -7,6 +7,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
 public class RegistrationDAO {
+    // Declare strings for the insert, delete (x2), and select queries 
+    private static final String QUERY_MAKE = "INSERT INTO registration (studentid, termid, crn) VALUES (?, ?, ?)";
+    private static final String QUERY_DROP_COURSE = "DELETE FROM registration WHERE (studentid = ?) AND (termid = ?) AND (crn = ?)";
+    private static final String QUERY_WITHDRAW = "DELETE FROM registration WHERE (studentid = ?) AND (termid = ?)";
+    private static final String QUERY_LIST = "SELECT * FROM registration WHERE (studentid = ?) AND (termid = ?)";
     
     private final DAOFactory daoFactory;
     
@@ -27,7 +32,17 @@ public class RegistrationDAO {
             
             if (conn.isValid(0)) {
                 
-                // INSERT YOUR CODE HERE
+                // prepare statement with query
+                ps = conn.prepareStatement(QUERY_MAKE);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                
+                // check if insertion was succesful
+                if (ps.executeUpdate() > 0) {
+                    // if so, set result to true
+                    result = true;
+                }
                 
             }
             
@@ -58,7 +73,17 @@ public class RegistrationDAO {
             
             if (conn.isValid(0)) {
                 
-                // INSERT YOUR CODE HERE
+                // prepare statement with query
+                ps = conn.prepareStatement(QUERY_DROP_COURSE);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                ps.setInt(3, crn);
+                
+                // check if insertion was succesful
+                if (ps.executeUpdate() > 0) {
+                    // if so, set result to true
+                    result = true;
+                }
                 
             }
             
@@ -88,7 +113,16 @@ public class RegistrationDAO {
             
             if (conn.isValid(0)) {
                 
-                // INSERT YOUR CODE HERE
+                // prepare statement with query
+                ps = conn.prepareStatement(QUERY_WITHDRAW);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                
+                // check if insertion was succesful
+                if (ps.executeUpdate() > 0) {
+                    // if so, set result to true
+                    result = true;
+                }
                 
             }
             
@@ -120,7 +154,16 @@ public class RegistrationDAO {
             
             if (conn.isValid(0)) {
                 
-                // INSERT YOUR CODE HERE
+                // prepare statement with query
+                ps = conn.prepareStatement(QUERY_LIST);
+                ps.setInt(1, studentid);
+                ps.setInt(2, termid);
+                
+                // executing the query
+                rs = ps.executeQuery();
+                
+                // converting the result set to Json array
+                result = DAOUtility.getResultSetAsJson(rs);
                 
             }
             
